@@ -37,11 +37,11 @@ export class LoginController {
       const user = await this.loginService.findOne({email});
 
       if (!user) {
-          throw new BadRequestException('invalid credentials');
+          throw new BadRequestException('invalid email');
       }
 
       if (!await bcrypt.compare(password, user.password)) {
-          throw new BadRequestException('invalid credentials');
+          throw new BadRequestException('invalid password ');
       }
 
       const jwt = await this.jwtService.signAsync({id: user.id});
@@ -49,7 +49,7 @@ export class LoginController {
       response.cookie('jwt', jwt, {httpOnly: true});
 
       return {
-          message: 'success'
+          message: 'logined in successfully'
       };
   }
 
