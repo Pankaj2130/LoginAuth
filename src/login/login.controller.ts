@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, BadRequestException, Req, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, BadRequestException, Req, UnauthorizedException, ValidationPipe } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
@@ -10,9 +10,9 @@ export class LoginController {
   constructor(private readonly loginService: LoginService, private jwtService: JwtService) {}
   @Post('register')
   async register(
-      @Body('name') name: string,
-      @Body('email') email: string,
-      @Body('password') password: string
+      @Body('name', new ValidationPipe()) name: string,
+      @Body('email', new ValidationPipe()) email: string,
+      @Body('password', new ValidationPipe()) password: string
   ) {
       const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -26,12 +26,15 @@ export class LoginController {
       delete user.password;
 
       return user;
+
+
+      
   }
 
   @Post('login')
   async login(
-      @Body('email') email: string,
-      @Body('password') password: string,
+      @Body('email',new ValidationPipe()) email: string,
+      @Body('password',new ValidationPipe()) password: string,
       @Res({passthrough: true}) response: Response
   ) {
       const user = await this.loginService.findOne({email});
@@ -48,9 +51,7 @@ export class LoginController {
 
       response.cookie('jwt', jwt, {httpOnly: true});
 
-      return {
-          message: 'logined in successfully'
-      };
+      return "jwt:"+jwt;
   }
 
   @Get('user')
@@ -79,7 +80,7 @@ export class LoginController {
       response.clearCookie('jwt');
 
       return {
-          message: 'success'
+          message: 'Logout success!'
       }
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
@@ -9,7 +10,7 @@ import { loginuser } from './login.schema';
 export class LoginService {
   
   constructor(@InjectModel(loginuser.name) private readonly loginuserModel: Model < loginuser > ) {}
-
+  
   async create(createLoginDto: CreateLoginDto): Promise < loginuser > {
     const employee = new this.loginuserModel(createLoginDto);
     return employee.save();
