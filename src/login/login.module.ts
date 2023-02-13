@@ -12,7 +12,7 @@ import { loginuser, loginuserSchema } from './login.schema';
       {
         name: loginuser.name,
         schema: loginuserSchema,
-      },
+      }
     ]),
     JwtModule.register({
       secret: 'secret',

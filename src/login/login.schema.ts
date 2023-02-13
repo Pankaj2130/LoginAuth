@@ -16,4 +16,5 @@ export class loginuser {
   
 }
 
+
 export const loginuserSchema = SchemaFactory.createForClass(loginuser);

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
@@ -15,11 +14,20 @@ export class LoginService {
     const employee = new this.loginuserModel(createLoginDto);
     return employee.save();
   }
-  
+
+  async findAll():Promise <loginuser[]> {
+    return this.loginuserModel.find()
+    .exec();
+  }  
+  // async findRegister():Promise <registeruser[]>{
+  //   return this.loginuserModel.find()
+  //   .exec();
+  // }
 
   async findOne(condition: any): Promise<loginuser> {
     return this.loginuserModel.findOne(condition);
   }
+
   
   // constructor(@InjectModel(loginuser.name) private readonly loginuserModel: Model < loginuser > ) {}
 
