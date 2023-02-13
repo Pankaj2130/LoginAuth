@@ -5,10 +5,24 @@ import { UpdateLoginDto } from './dto/update-login.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import {Response, Request} from 'express';
-@Controller('login')
+@Controller('')
 export class LoginController {
   constructor(private readonly loginService: LoginService, private jwtService: JwtService) {}
-  @Post('register')
+
+
+
+  @Get('/register')
+  findAll() {
+    return this.loginService.findAll();
+  }
+
+
+//   @Get('/register')
+//   findRegister() {
+//     return this.loginService.findAll();
+//   }
+
+  @Post('/register')
   async register(
       @Body('name', new ValidationPipe()) name: string,
       @Body('email', new ValidationPipe()) email: string,
@@ -26,10 +40,10 @@ export class LoginController {
       delete user.password;
 
       return user;
-
-
-      
   }
+
+  
+  
 
   @Post('login')
   async login(
@@ -51,10 +65,10 @@ export class LoginController {
 
       response.cookie('jwt', jwt, {httpOnly: true});
 
-      return "jwt:"+jwt;
+      return "jwt:"+jwt ;
   }
 
-  @Get('user')
+  @Get('/user')
   async user(@Req() request: Request) {
       try {
           const cookie = request.cookies['jwt'];
@@ -78,7 +92,6 @@ export class LoginController {
   @Post('logout')
   async logout(@Res({passthrough: true}) response: Response) {
       response.clearCookie('jwt');
-
       return {
           message: 'Logout success!'
       }
