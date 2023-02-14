@@ -65,7 +65,9 @@ export class LoginController {
 
       response.cookie('jwt', jwt, {httpOnly: true});
 
-      return "jwt:"+jwt ;
+      return {
+        message:"Login Successful",
+      "Token":jwt} ;
   }
 
   @Get('/user')
